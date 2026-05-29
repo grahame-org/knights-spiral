@@ -27,19 +27,27 @@ class TestPlaceKnights:
         assert_that(occupied, has_length(1))
         assert_that(occupied, has_key((0, 0)))
 
-    def test_five_knights_single_colour_placed_sequentially(self):
-        """With 1 colour, no attack restrictions apply (same-colour
-        knights don't block each other), so knights fill cells 0-4."""
+    def test_five_knights_match_example_2(self):
+        """Verify against example 2 from the spec.
+
+        Expected knights at cell IDs: 0, 1, 2, 3, 20
+        Corresponding coords: (0,0), (1,0), (1,-1), (0,-1), (-2,2)
+        """
         occupied = place_knights(5)
         assert_that(occupied, has_length(5))
-        expected_coords = {(0, 0), (1, 0), (1, -1), (0, -1), (-1, -1)}
+        expected_coords = {(0, 0), (1, 0), (1, -1), (0, -1), (-2, 2)}
         assert_that(set(occupied.keys()), equal_to(expected_coords))
 
-    def test_single_colour_same_colour_knights_can_attack(self):
-        """With 1 colour, knights of the same colour are allowed to be
-        a knight's move apart since only different colours block."""
+    def test_no_two_knights_attack_each_other(self):
         occupied = place_knights(10)
-        assert_that(occupied, has_length(10))
+        occupied_list = list(occupied.keys())
+        for i, (x1, y1) in enumerate(occupied_list):
+            targets = set(get_knight_targets(x1, y1))
+            for j, pos in enumerate(occupied_list):
+                if i != j:
+                    assert pos not in targets, (
+                        f"Knight at {(x1, y1)} attacks knight at {pos}"
+                    )
 
 
 class TestPlaceKnightsMultiColour:
@@ -72,10 +80,10 @@ class TestPlaceKnightsMultiColour:
                     )
 
     def test_single_colour_backward_compatible(self):
-        """Single colour fills cells sequentially (no attack blocking)."""
+        """Single colour uses original rules: no two knights attack."""
         occupied = place_knights(5, num_colours=1)
         assert_that(occupied, has_length(5))
-        expected_coords = {(0, 0), (1, 0), (1, -1), (0, -1), (-1, -1)}
+        expected_coords = {(0, 0), (1, 0), (1, -1), (0, -1), (-2, 2)}
         assert_that(set(occupied.keys()), equal_to(expected_coords))
         for colour in occupied.values():
             assert_that(colour, equal_to(0))

@@ -28,13 +28,12 @@ class TestGenerateImage:
         assert_that(pixels[0, 0], equal_to((0, 0, 0)))
 
     def test_image_dimensions_match_bounding_box(self, tmp_path):
-        """With 5 single-colour knights at cells 0-4:
-        (0,0),(1,0),(1,-1),(0,-1),(-1,-1),
-        bounding box is x:[-1,1], y:[-1,0] -> 3x2 image."""
+        """With 5 knights at (0,0),(1,0),(1,-1),(0,-1),(-2,2),
+        bounding box is x:[-2,1], y:[-1,2] -> 4x4 image."""
         output = tmp_path / "test.png"
         generate_image(5, output)
         img = Image.open(output)
-        assert_that(img.size, equal_to((3, 2)))
+        assert_that(img.size, equal_to((4, 4)))
 
     def test_single_knight_produces_1x1_image(self, tmp_path):
         output = tmp_path / "test.png"
@@ -43,8 +42,7 @@ class TestGenerateImage:
         assert_that(img.size, equal_to((1, 1)))
 
     def test_white_pixels_for_empty_cells(self, tmp_path):
-        """With 5 single-colour knights in a 3x2 image,
-        one pixel should be white."""
+        """With 5 knights in a 4x4 image, most pixels should be white."""
         output = tmp_path / "test.png"
         generate_image(5, output)
         img = Image.open(output)
@@ -54,7 +52,7 @@ class TestGenerateImage:
             for y in range(img.height):
                 if pixels[x, y] == (255, 255, 255):
                     white_count += 1
-        assert_that(white_count, equal_to(3 * 2 - 5))
+        assert_that(white_count, equal_to(4 * 4 - 5))
 
 
 class TestGenerateImageMultiColour:

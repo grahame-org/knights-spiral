@@ -37,11 +37,17 @@ def place_knights(
         colour = placed % num_colours
         xy = cell_id_to_xy(cell_id)
         if xy not in occupied:
-            blocked = any(
-                xy in attacked_by[c]
-                for c in range(num_colours)
-                if c != colour
-            )
+            if num_colours == 1:
+                # Original rules: no knight may be a knight's move
+                # from any other knight.
+                blocked = xy in attacked_by[0]
+            else:
+                # Multi-colour rules: only *different* colours block.
+                blocked = any(
+                    xy in attacked_by[c]
+                    for c in range(num_colours)
+                    if c != colour
+                )
             if not blocked:
                 occupied[xy] = colour
                 for target in get_knight_targets(*xy):
