@@ -34,3 +34,12 @@ jobs:
         with:
           name: knights-spiral-1000-2colours
           path: knights_spiral_1000_2colours.png
+
+      - name: Generate 3-colour image
+        run: knights-spiral 1000 -c 3 -o knights_spiral_1000_3colours.png
+
+      - name: Upload 3-colour image
+        uses: actions/upload-artifact@v4
+        with:
+          name: knights-spiral-1000-3colours
+          path: knights_spiral_1000_3colours.png
