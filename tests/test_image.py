@@ -1,0 +1,59 @@
+"""Tests for the PNG image generation."""
+
+import os
+
+import pytest
+from hamcrest import assert_that, equal_to, greater_than, is_
+from PIL import Image
+from pyfakefs.fake_filesystem_unittest import Patcher
+
+
+from knights_spiral.image import generate_image
+
+
+class TestGenerateImage:
+
+    def test_generates_png_file(self, tmp_path):
+        output = tmp_path / "test.png"
+        generate_image(5, output)
+        assert_that(output.exists(), is_(True))
+
+    def test_image_has_no_alpha_channel(self, tmp_path):
+        output = tmp_path / "test.png"
+        generate_image(5, output)
+        img = Image.open(output)
+        assert_that(img.mode, equal_to("RGB"))
+
+    def test_image_contains_black_pixels_for_knights(self, tmp_path):
+        output = tmp_path / "test.png"
+        generate_image(1, output)
+        img = Image.open(output)
+        pixels = img.load()
+        assert_that(pixels[0, 0], equal_to((0, 0, 0)))
+
+    def test_image_dimensions_match_bounding_box(self, tmp_path):
+        """With 5 knights at (0,0),(0,-1),(-1,-1),(-1,0),(2,2),
+        bounding box is x:[-1,2], y:[-1,2] -> 4x4 image."""
+        output = tmp_path / "test.png"
+        generate_image(5, output)
+        img = Image.open(output)
+        assert_that(img.size, equal_to((4, 4)))
+
+    def test_single_knight_produces_1x1_image(self, tmp_path):
+        output = tmp_path / "test.png"
+        generate_image(1, output)
+        img = Image.open(output)
+        assert_that(img.size, equal_to((1, 1)))
+
+    def test_white_pixels_for_empty_cells(self, tmp_path):
+        """With 5 knights in a 4x4 image, most pixels should be white."""
+        output = tmp_path / "test.png"
+        generate_image(5, output)
+        img = Image.open(output)
+        pixels = img.load()
+        white_count = 0
+        for x in range(img.width):
+            for y in range(img.height):
+                if pixels[x, y] == (255, 255, 255):
+                    white_count += 1
+        assert_that(white_count, equal_to(4 * 4 - 5))
