@@ -1,6 +1,5 @@
 """Tests for the knight placement algorithm."""
 
-import pytest
 from hamcrest import assert_that, equal_to, has_item, has_length, is_not
 
 from knights_spiral.knights import place_knights, get_knight_targets

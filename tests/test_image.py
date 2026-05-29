@@ -1,11 +1,7 @@
 """Tests for the PNG image generation."""
 
-import os
-
-import pytest
-from hamcrest import assert_that, equal_to, greater_than, is_
+from hamcrest import assert_that, equal_to, is_
 from PIL import Image
-from pyfakefs.fake_filesystem_unittest import Patcher
 
 
 from knights_spiral.image import generate_image
@@ -32,7 +28,7 @@ class TestGenerateImage:
         assert_that(pixels[0, 0], equal_to((0, 0, 0)))
 
     def test_image_dimensions_match_bounding_box(self, tmp_path):
-        """With 5 knights at (0,0),(0,-1),(-1,-1),(-1,0),(2,2),
+        """With 5 knights at (0,0),(1,0),(1,-1),(0,-1),(-2,2),
         bounding box is x:[-2,1], y:[-1,2] -> 4x4 image."""
         output = tmp_path / "test.png"
         generate_image(5, output)

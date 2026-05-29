@@ -17,7 +17,7 @@ class TestCli:
             main()
         assert_that(output.exists(), equal_to(True))
 
-    def test_rejects_zero_iterations(self, tmp_path):
+    def test_rejects_zero_iterations(self):
         with patch.object(sys, "argv", ["knights-spiral", "0"]):
             with pytest.raises(SystemExit) as exc_info:
                 main()
