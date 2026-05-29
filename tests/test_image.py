@@ -33,7 +33,7 @@ class TestGenerateImage:
 
     def test_image_dimensions_match_bounding_box(self, tmp_path):
         """With 5 knights at (0,0),(0,-1),(-1,-1),(-1,0),(2,2),
-        bounding box is x:[-1,2], y:[-1,2] -> 4x4 image."""
+        bounding box is x:[-2,1], y:[-1,2] -> 4x4 image."""
         output = tmp_path / "test.png"
         generate_image(5, output)
         img = Image.open(output)

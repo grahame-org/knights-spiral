@@ -32,11 +32,11 @@ class TestPlaceKnights:
         """Verify against example 2 from the spec.
 
         Expected knights at cell IDs: 0, 1, 2, 3, 20
-        Corresponding coords: (0,0), (0,-1), (-1,-1), (-1,0), (2,2)
+        Corresponding coords: (0,0), (1,0), (1,-1), (0,-1), (-2,2)
         """
         occupied = place_knights(5)
         assert_that(occupied, has_length(5))
-        expected_coords = {(0, 0), (0, -1), (-1, -1), (-1, 0), (2, 2)}
+        expected_coords = {(0, 0), (1, 0), (1, -1), (0, -1), (-2, 2)}
         assert_that(occupied, equal_to(expected_coords))
 
     def test_no_two_knights_attack_each_other(self):

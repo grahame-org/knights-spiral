@@ -1,12 +1,12 @@
 """Spiral coordinate mapping: cell ID <-> (x, y) grid coordinates.
 
 The spiral starts at (0, 0) with cell ID 0 and expands counter-clockwise:
-    up, left, down, right
+    right, up, left, down
 with step counts: 1, 1, 2, 2, 3, 3, 4, 4, ...
 """
 
-# Direction vectors: up, left, down, right (counter-clockwise)
-_DIRECTIONS = [(0, -1), (-1, 0), (0, 1), (1, 0)]
+# Direction vectors: right, up, left, down (counter-clockwise)
+_DIRECTIONS = [(1, 0), (0, -1), (-1, 0), (0, 1)]
 
 
 def cell_id_to_xy(cell_id: int) -> tuple[int, int]:
