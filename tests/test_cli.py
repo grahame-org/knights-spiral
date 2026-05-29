@@ -22,3 +22,18 @@ class TestCli:
             with pytest.raises(SystemExit) as exc_info:
                 main()
             assert_that(exc_info.value.code, equal_to(1))
+
+    def test_generates_with_colours(self, tmp_path):
+        output = tmp_path / "out.png"
+        with patch.object(
+            sys, "argv",
+            ["knights-spiral", "10", "-c", "2", "-o", str(output)],
+        ):
+            main()
+        assert_that(output.exists(), equal_to(True))
+
+    def test_rejects_zero_colours(self):
+        with patch.object(sys, "argv", ["knights-spiral", "5", "-c", "0"]):
+            with pytest.raises(SystemExit) as exc_info:
+                main()
+            assert_that(exc_info.value.code, equal_to(1))

@@ -20,6 +20,12 @@ def main() -> None:
         default="knights_spiral.png",
         help="Output PNG file path (default: knights_spiral.png).",
     )
+    parser.add_argument(
+        "-c", "--colours",
+        type=int,
+        default=1,
+        help="Number of knight colours (default: 1).",
+    )
 
     args = parser.parse_args()
 
@@ -27,7 +33,11 @@ def main() -> None:
         print("Error: iterations must be at least 1.", file=sys.stderr)
         sys.exit(1)
 
-    generate_image(args.iterations, args.output)
+    if args.colours < 1:
+        print("Error: colours must be at least 1.", file=sys.stderr)
+        sys.exit(1)
+
+    generate_image(args.iterations, args.output, args.colours)
 
 
 if __name__ == "__main__":

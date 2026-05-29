@@ -17,11 +17,29 @@ jobs:
       - name: Install dependencies
         run: pip install -e .
 
-      - name: Generate image
+      - name: Generate single-colour image
         run: knights-spiral 1000 -o knights_spiral_1000.png
 
-      - name: Upload image
+      - name: Upload single-colour image
         uses: actions/upload-artifact@v4
         with:
           name: knights-spiral-1000
           path: knights_spiral_1000.png
+
+      - name: Generate 2-colour image
+        run: knights-spiral 1000 -c 2 -o knights_spiral_1000_2colours.png
+
+      - name: Upload 2-colour image
+        uses: actions/upload-artifact@v4
+        with:
+          name: knights-spiral-1000-2colours
+          path: knights_spiral_1000_2colours.png
+
+      - name: Generate 3-colour image
+        run: knights-spiral 1000 -c 3 -o knights_spiral_1000_3colours.png
+
+      - name: Upload 3-colour image
+        uses: actions/upload-artifact@v4
+        with:
+          name: knights-spiral-1000-3colours
+          path: knights_spiral_1000_3colours.png

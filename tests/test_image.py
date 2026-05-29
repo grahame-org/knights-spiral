@@ -53,3 +53,37 @@ class TestGenerateImage:
                 if pixels[x, y] == (255, 255, 255):
                     white_count += 1
         assert_that(white_count, equal_to(4 * 4 - 5))
+
+
+class TestGenerateImageMultiColour:
+
+    def test_multi_colour_image_has_no_alpha(self, tmp_path):
+        output = tmp_path / "test.png"
+        generate_image(10, output, num_colours=2)
+        img = Image.open(output)
+        assert_that(img.mode, equal_to("RGB"))
+
+    def test_multi_colour_has_non_white_pixels(self, tmp_path):
+        output = tmp_path / "test.png"
+        generate_image(10, output, num_colours=2)
+        img = Image.open(output)
+        pixels = img.load()
+        non_white = 0
+        for x in range(img.width):
+            for y in range(img.height):
+                if pixels[x, y] != (255, 255, 255):
+                    non_white += 1
+        assert_that(non_white, equal_to(10))
+
+    def test_multi_colour_has_distinct_colours(self, tmp_path):
+        output = tmp_path / "test.png"
+        generate_image(10, output, num_colours=2)
+        img = Image.open(output)
+        pixels = img.load()
+        colours = set()
+        for x in range(img.width):
+            for y in range(img.height):
+                px = pixels[x, y]
+                if px != (255, 255, 255):
+                    colours.add(px)
+        assert_that(len(colours), equal_to(2))
