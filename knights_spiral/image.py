@@ -19,7 +19,7 @@ def _colour_palette(num_colours: int) -> list[tuple[int, int, int]]:
     colours: list[tuple[int, int, int]] = []
     for i in range(num_colours):
         hue = i / num_colours
-        r, g, b = colorsys.hsv_to_rgb(hue, 1.0, 0.8)
+        r, g, b = colorsys.hsv_to_rgb(hue, 1.0, 1.0)
         colours.append((int(r * 255), int(g * 255), int(b * 255)))
     return colours
 

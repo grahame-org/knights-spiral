@@ -22,11 +22,16 @@ def place_knights(
     Args:
         iterations: Total number of knights to place.
         num_colours: Number of distinct knight colours (0-indexed internally).
+            Must be >= 1.
 
     Returns a dict mapping (x, y) coordinates to colour index (0-based).
     A cell is blocked for a colour if it is a knight's move away from
-    a cell occupied by a *different* colour.
+    a cell occupied by a *different* colour.  When ``num_colours == 1``
+    the original rules apply: a cell is also blocked by a same-colour
+    (i.e. any) occupant.
     """
+    if num_colours < 1:
+        raise ValueError(f"num_colours must be >= 1, got {num_colours}")
     occupied: dict[tuple[int, int], int] = {}
     # attacked_by[colour] = set of cells attacked by that colour
     attacked_by: list[set[tuple[int, int]]] = [set() for _ in range(num_colours)]
