@@ -14,23 +14,41 @@ def get_knight_targets(x: int, y: int) -> list[tuple[int, int]]:
     return [(x + dx, y + dy) for dx, dy in KNIGHT_MOVES]
 
 
-def place_knights(iterations: int) -> set[tuple[int, int]]:
+def place_knights(
+    iterations: int, num_colours: int = 1
+) -> dict[tuple[int, int], int]:
     """Place `iterations` knights according to the spiral rules.
 
-    Returns the set of (x, y) coordinates where knights are placed.
+    Args:
+        iterations: Total number of knights to place.
+        num_colours: Number of distinct knight colours (0-indexed internally).
+
+    Returns a dict mapping (x, y) coordinates to colour index (0-based).
+    A cell is blocked for a colour if it is a knight's move away from
+    a cell occupied by a *different* colour.
     """
-    occupied: set[tuple[int, int]] = set()
-    attacked: set[tuple[int, int]] = set()
+    occupied: dict[tuple[int, int], int] = {}
+    # attacked_by[colour] = set of cells attacked by that colour
+    attacked_by: list[set[tuple[int, int]]] = [set() for _ in range(num_colours)]
     placed = 0
     cell_id = 0
 
     while placed < iterations:
+        colour = placed % num_colours
         xy = cell_id_to_xy(cell_id)
-        if xy not in occupied and xy not in attacked:
-            occupied.add(xy)
-            for target in get_knight_targets(*xy):
-                attacked.add(target)
-            placed += 1
+        if xy not in occupied:
+            blocked = any(
+                xy in attacked_by[c]
+                for c in range(num_colours)
+                if c != colour
+            )
+            if not blocked:
+                occupied[xy] = colour
+                for target in get_knight_targets(*xy):
+                    attacked_by[colour].add(target)
+                placed += 1
+                cell_id = 0
+                continue
         cell_id += 1
 
     return occupied
