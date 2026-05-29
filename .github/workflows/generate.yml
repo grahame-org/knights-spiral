@@ -1,0 +1,28 @@
+name: Generate Knight's Spiral
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -e .
+
+      - name: Generate image
+        run: knights-spiral 100 -o knights_spiral_100.png
+
+      - name: Upload image
+        uses: actions/upload-artifact@v4
+        with:
+          name: knights-spiral-100
+          path: knights_spiral_100.png
