@@ -18,7 +18,7 @@ jobs:
         run: pip install -e .
 
       - name: Generate image
-        run: knights-spiral 100 -o knights_spiral_100.png
+        run: knights-spiral 1000 -o knights_spiral_1000.png
 
       - name: Upload image
         uses: actions/upload-artifact@v4
