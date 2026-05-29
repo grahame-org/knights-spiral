@@ -23,5 +23,5 @@ jobs:
       - name: Upload image
         uses: actions/upload-artifact@v4
         with:
-          name: knights-spiral-100
-          path: knights_spiral_100.png
+          name: knights-spiral-1000
+          path: knights_spiral_1000.png
